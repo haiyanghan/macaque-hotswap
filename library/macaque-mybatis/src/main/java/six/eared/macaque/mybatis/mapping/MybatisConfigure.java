@@ -17,9 +17,8 @@ public interface MybatisConfigure {
     Map<String, Object> mappedStatements();
 
     @Method.InvokeSuper
-    @Method.Name("mappedStatements.put")
+    @Method.Expr("mappedStatements.put(..)")
     void putStatement(String key, @Typed("java.lang.Object") MybatisStatement value);
 
-    @Method.Name("getSqlFragments")
     Object getSqlFragments();
 }

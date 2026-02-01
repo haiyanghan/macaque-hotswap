@@ -32,13 +32,13 @@ public class TestUpdateSqlStatement extends six.eared.macaque.agent.test.Env  {
     }
 
     interface SqlSessionFactory {
-        @Method.Name("configuration.mappedStatements.get")
+        @Method.Expr("configuration.mappedStatements.get(..)")
         MybatisStatement2 getStatement(String key);
     }
 
     @Target.Bind("org.apache.ibatis.mapping.MappedStatement")
     interface MybatisStatement2 extends MybatisStatement {
-        @Method.Name("sqlSource.getBoundSql")
+        @Method.Expr("sqlSource.getBoundSql(..)")
         BoundSql getBoundSql(Object parameter);
     }
 

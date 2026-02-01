@@ -17,6 +17,7 @@ import six.eared.macaque.mybatis.mapping.XMLMapperBuilder;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 import java.io.ByteArrayInputStream;
@@ -85,8 +86,10 @@ public class MybatisXmlMapperHandler implements HotswapHook {
                     }
                 }
             }
-        } catch (Exception ignored) {
+        } catch (XMLStreamException ignored) {
 
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -112,10 +115,9 @@ public class MybatisXmlMapperHandler implements HotswapHook {
 
     @Runtime
     static interface StartElementEvent {
-        @Method.Name("getName")
         public QName getName();
 
-        @Method.Name("getAttributeByName")
+        @Method.Expr("getAttributeByName(..)")
         Attribute getAttributeByName(QName name);
     }
 }

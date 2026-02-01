@@ -1,7 +1,7 @@
 package six.eared.macaque.library.patch;
 
 import io.github.hhy50.linker.asm.MethodBuilder;
-import io.github.hhy50.linker.define.MethodDescriptor;
+import io.github.hhy50.linker.generate.bytecode.MethodDescriptor;
 import lombok.SneakyThrows;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;

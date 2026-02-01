@@ -3,7 +3,7 @@ package six.eared.macaque.library.patch;
 
 import io.github.hhy50.linker.asm.AsmClassBuilder;
 import io.github.hhy50.linker.asm.MethodBuilder;
-import io.github.hhy50.linker.define.MethodDescriptor;
+import io.github.hhy50.linker.generate.bytecode.MethodDescriptor;
 import io.github.hhy50.linker.generate.bytecode.action.*;
 import io.github.hhy50.linker.generate.bytecode.utils.Methods;
 import io.github.hhy50.linker.generate.bytecode.vars.ObjectVar;

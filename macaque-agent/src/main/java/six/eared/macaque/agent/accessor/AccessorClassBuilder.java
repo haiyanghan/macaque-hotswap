@@ -2,7 +2,7 @@ package six.eared.macaque.agent.accessor;
 
 import io.github.hhy50.linker.asm.AsmClassBuilder;
 import io.github.hhy50.linker.asm.MethodBuilder;
-import io.github.hhy50.linker.define.MethodDescriptor;
+import io.github.hhy50.linker.generate.bytecode.MethodDescriptor;
 import io.github.hhy50.linker.generate.bytecode.action.Actions;
 import io.github.hhy50.linker.generate.bytecode.action.LdcLoadAction;
 import io.github.hhy50.linker.generate.bytecode.action.MethodInvokeAction;
@@ -27,7 +27,9 @@ public class AccessorClassBuilder extends AsmClassBuilder {
 
     private static final String FIELD_GETTER_ANNO = "Lio/github/hhy50/linker/annotations/Field$Getter;";
     private static final String FIELD_SETTER_ANNO = "Lio/github/hhy50/linker/annotations/Field$Setter;";
-    private static final String METHOD_NAME_ANNO = "Lio/github/hhy50/linker/annotations/Method$Name;";
+    private static final String STATIC_FIELD_GETTER_ANNO = "Lio/github/hhy50/linker/annotations/Field$StaticGetter;";
+    private static final String STATIC_FIELD_SETTER_ANNO = "Lio/github/hhy50/linker/annotations/Field$StaticSetter;";
+    private static final String METHOD_EXPR_ANNO = "Lio/github/hhy50/linker/annotations/Method$Expr;";
     private static final String INVOKESUPER_ANNO = "Lio/github/hhy50/linker/annotations/Method$InvokeSuper;";
     private static final String TARGET_BIND_ANNO = "Lio/github/hhy50/linker/annotations/Target$Bind;";
     private static final String LINKER_FIELD_NAME = "_linker";
@@ -50,7 +52,7 @@ public class AccessorClassBuilder extends AsmClassBuilder {
      */
     public AccessorClassBuilder(String className, String superName, String[] interfaces) {
         super(Opcodes.ACC_PUBLIC, className, superName, interfaces, null);
-        this.linkerClassBuilder = new AsmClassBuilder(Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT | Opcodes.ACC_INTERFACE, className+"$Linker", null, null, null);
+        this.linkerClassBuilder = new AsmClassBuilder(Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT | Opcodes.ACC_INTERFACE, className + "$Linker", null, null, null);
 
         Type linkerType = TypeUtil.getType(linkerClassBuilder.getClassName());
         this.defineField(Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC, STATIC_LINKER_FIELD_NAME, linkerType, null, null)
@@ -68,11 +70,8 @@ public class AccessorClassBuilder extends AsmClassBuilder {
         Type methodType = Type.getMethodType(this$0Type);
         this.linkerClassBuilder.addAnnotation(TARGET_BIND_ANNO, Maps.of("value", this$0))
                 .defineMethod(Opcodes.ACC_PUBLIC, GET_ORIGIN_MNAME, methodType, null)
-                .intercept(Actions.multi(
-                        Methods.invokeInterface(MethodDescriptor.TARGET_PROVIDER_GET_TARGET)
-                                .setInstance(LOAD0),
-                        new TypeCastAction(Actions.stackTop(), this$0Type).thenReturn()
-                ));
+                .intercept(new TypeCastAction(Methods.invokeInterface(MethodDescriptor.TARGET_PROVIDER_GET_TARGET)
+                        .setInstance(LOAD0), this$0Type).thenReturn());
 
         Type linkerType = TypeUtil.getType(linkerClassBuilder.getClassName());
         super.defineMethod(Opcodes.ACC_PUBLIC, GET_ORIGIN_MNAME, methodType, null)
@@ -97,7 +96,7 @@ public class AccessorClassBuilder extends AsmClassBuilder {
     public void addMethod(String owner, AsmMethod method) {
         String methodName = owner.replace('.', '_')+"_"+method.getMethodName();
         MethodBuilder methodBuilder = linkerClassBuilder.defineMethod(Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT, methodName, method.getMethodType(), method.getExceptions());
-        methodBuilder.addAnnotation(METHOD_NAME_ANNO, Maps.of("value", method.getMethodName()));
+        methodBuilder.addAnnotation(METHOD_EXPR_ANNO, Maps.of("value", method.getMethodName()+"(..)"));
 
         MethodAccessRule rule = null;
         if (method.isStatic()) {
@@ -180,7 +179,7 @@ public class AccessorClassBuilder extends AsmClassBuilder {
      * @return
      */
     private String generateGetter(String owner, String getterName, AsmField asmField) {
-        String getter = Accessor.FIELD_GETTER_PREFIX+getterName;
+        String getter = Accessor.FIELD_GETTER_PREFIX + getterName;
         Type linkerType = TypeUtil.getType(linkerClassBuilder.getClassName());
         Type mType = Type.getMethodType(asmField.getType());
         super.defineMethod(Opcodes.ACC_PUBLIC | (Opcodes.ACC_STATIC & asmField.getModifier()), getter, mType, null)

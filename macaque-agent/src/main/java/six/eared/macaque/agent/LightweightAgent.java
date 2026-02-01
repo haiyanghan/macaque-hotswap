@@ -11,5 +11,6 @@ public class LightweightAgent {
         Environment.initEnv(true, inst);
         LibrarySpiLoader.loadLibraries();
         System.out.println("attach success, initEnv()");
+        System.out.println("linker output path: " + System.getProperty("linker.output.path"));
     }
 }

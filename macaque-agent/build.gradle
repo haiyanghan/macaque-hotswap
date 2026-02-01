@@ -19,7 +19,7 @@ dependencies {
     api 'org.ow2.asm:asm:9.3'
     api 'org.ow2.asm:asm-tree:9.3'
     api 'org.projectlombok:lombok:1.18.24'
-    api 'io.github.hhy50:reflect-linker:1.2.0'
+    api 'io.github.hhy50:reflect-linker:2.0.0'
     api('com.taobao.arthas:arthas-vmtool:4.0.3') {
         exclude group: 'com.taobao.arthas', module: 'arthas-common'
     }

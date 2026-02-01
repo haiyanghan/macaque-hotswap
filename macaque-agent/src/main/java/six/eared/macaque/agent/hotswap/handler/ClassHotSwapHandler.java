@@ -19,6 +19,7 @@ import six.eared.macaque.mbean.rmi.HotSwapRmiData;
 import six.eared.macaque.mbean.rmi.RmiResult;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,13 @@ import java.util.Map;
 @HotSwapFileType(fileType = FileType.Class)
 public class ClassHotSwapHandler extends FileHookHandler {
 
+    private static final List<String> SUPPORT_FILE = Arrays.asList("java", "class");
+
     @Override
     public RmiResult doHandler(HotSwapRmiData rmiData) throws Exception {
+        if (!SUPPORT_FILE.contains(rmiData.getFileType())) {
+            return RmiResult.error("unsupported file type");
+        }
         return handler(rmiData.getFileData(), rmiData.getExtProperties());
     }
 

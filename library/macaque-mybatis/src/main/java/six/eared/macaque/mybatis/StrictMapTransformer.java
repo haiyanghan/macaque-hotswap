@@ -2,8 +2,8 @@ package six.eared.macaque.mybatis;
 
 import io.github.hhy50.linker.LinkerFactory;
 import io.github.hhy50.linker.asm.MethodBuilder;
-import io.github.hhy50.linker.define.MethodDescriptor;
 import io.github.hhy50.linker.exceptions.LinkerException;
+import io.github.hhy50.linker.generate.bytecode.MethodDescriptor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;

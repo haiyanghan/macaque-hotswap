@@ -26,7 +26,7 @@ public class LibrarySpiLoader {
 
     @Runtime
     interface LibraryClassLinker {
-        @Runtime.Static
+        @Runtime.Static(name = "init", value = true)
         void init();
     }
 
