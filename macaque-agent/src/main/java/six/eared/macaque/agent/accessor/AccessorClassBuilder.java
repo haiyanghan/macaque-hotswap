@@ -70,8 +70,8 @@ public class AccessorClassBuilder extends AsmClassBuilder {
         Type methodType = Type.getMethodType(this$0Type);
         this.linkerClassBuilder.addAnnotation(TARGET_BIND_ANNO, Maps.of("value", this$0))
                 .defineMethod(Opcodes.ACC_PUBLIC, GET_ORIGIN_MNAME, methodType, null)
-                .intercept(new TypeCastAction(Methods.invokeInterface(MethodDescriptor.TARGET_PROVIDER_GET_TARGET)
-                        .setInstance(LOAD0), this$0Type).thenReturn());
+                .intercept(Methods.invokeInterface(MethodDescriptor.TARGET_PROVIDER_GET_TARGET)
+                        .setInstance(LOAD0).cast(this$0Type).thenReturn());
 
         Type linkerType = TypeUtil.getType(linkerClassBuilder.getClassName());
         super.defineMethod(Opcodes.ACC_PUBLIC, GET_ORIGIN_MNAME, methodType, null)
