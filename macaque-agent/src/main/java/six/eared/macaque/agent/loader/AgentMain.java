@@ -32,11 +32,11 @@ public class AgentMain {
         if (!START_FLAG) {
             Class<?> bootstrapClass = null;
             try {
-                URL agentJar = AgentMain.class.getClassLoader().getResource("lib/agent.jar");
+                File agentJar = getTempJar("lib/agent.jar");
                 File preloadJar = getTempJar("lib/preload.jar");
 
                 // 加载引导类
-                ClassLoader classLoader = getClassLoader(agentJar);
+                ClassLoader classLoader = getClassLoader(agentJar.toURI().toURL());
                 bootstrapClass = classLoader.loadClass("six.eared.macaque.agent.AgentBootstrap");
 
                 inst.appendToBootstrapClassLoaderSearch(new JarFile(preloadJar));
@@ -87,22 +87,5 @@ public class AgentMain {
             classLoader = classLoader.getParent();
         }
         return new MacaqueClassLoader(agentJar, classLoader);
-    }
-
-    public static void main(String[] args) throws IOException {
-        // 加载agent.jar
-        URL agentJar = new URL("jar:file:/C:/Users/49168/IdeaProjects/macaque-hotswap/macaque-server/build/distributions/bin/macaque-agent.jar!/lib/agent.jar");
-        if (agentJar == null) {
-            return;
-        }
-        ClassLoader classLoader = getClassLoader(agentJar);
-        Class<?> bootstrapClass = null;
-        try {
-            // 加载引导类
-            bootstrapClass = classLoader.loadClass("six.eared.macaque.agent.AgentBootstrap");
-        } catch (Exception e) {
-            System.out.println("load AgentBootstrap.class error");
-            e.printStackTrace();
-        }
     }
 }

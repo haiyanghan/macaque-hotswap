@@ -16,8 +16,8 @@ dependencies {
     compileOnly files("${System.getProperty('java.home')}/../lib/tools.jar")
     api project(':macaque-mbean')
     api project(':macaque-common')
-    api 'org.ow2.asm:asm:9.3'
-    api 'org.ow2.asm:asm-tree:9.3'
+    api 'org.ow2.asm:asm:9.10.1'
+    api 'org.ow2.asm:asm-tree:9.10.1'
     api 'org.projectlombok:lombok:1.18.24'
     api 'io.github.hhy50:reflect-linker:2.0.0'
     api('com.taobao.arthas:arthas-vmtool:4.0.3') {
